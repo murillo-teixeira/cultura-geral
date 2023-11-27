@@ -2,11 +2,11 @@ import Head from 'next/head';
 
 export default function Home({ sheetData }) {
   // Client-side JavaScript to refresh the page every 5 seconds
-  // if (typeof window !== 'undefined') {
-  //   setTimeout(() => {
-  //     window.location.reload();
-  //   }, 10000);
-  // }
+  if (typeof window !== 'undefined') {
+    setTimeout(() => {
+      window.location.reload();
+    }, 10000);
+  }
 
   // Function to render the colored circle
   const renderCircle = (position) => {
