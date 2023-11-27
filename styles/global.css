@@ -45,6 +45,13 @@ table {
   max-width: 400px;
 }
 
+td:nth-child(2) > div {
+  /* background-color: #433D75; */
+  width: 100%;
+  justify-content: left !important;
+}
+
+
 a {
   color: inherit;
   text-decoration: none;
