@@ -43,6 +43,7 @@ export default function Home({ sheetData }) {
       </Head>
 
       <main>
+        <img src='/logo_mc.svg'></img>
         <h1>CULTURA GERAL</h1>
         <h3>COMPETIÇÃO</h3>
         <table>

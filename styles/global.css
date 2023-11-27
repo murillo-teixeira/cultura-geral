@@ -20,8 +20,9 @@ main {
 
 h1 {
   color: white;
+  font-size: 40px;
   margin-bottom: 4px;
-  margin-top: 40px;
+  margin-top: 12px;
 }
 
 h3 {
@@ -34,7 +35,12 @@ h3 {
   margin-top: 0;
   background-color: #BB3B17;
   border-radius: 80%;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
+}
+
+img {
+  margin-top: 32px;
+  height: 48px;
 }
 
 table { 
@@ -61,12 +67,6 @@ a {
   box-sizing: border-box;
 }
 
-
-
-img {
-  max-width: 100%;
-  height: auto;
-}
 
 td > div { 
   /* width: 100%; */
