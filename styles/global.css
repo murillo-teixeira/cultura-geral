@@ -90,6 +90,10 @@ tr {
 
 span {
   padding: 10px;
+  padding-left: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 50px;
   width: 50px;
   position: fixed;
