@@ -39,12 +39,14 @@ export default function Home({ sheetData }) {
       <Head>
         <title>Pontuação - Competição Geral</title>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin/>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+        <link rel="shortcut icon" href="/logo_mc_preto.svg" />
+
       </Head>
 
       <main>
-        <Link href="/responder">😀!</Link>
+      <Link href="/responder"><span>🔠</span></Link>
         <img src='/logo_mc.svg'></img>
         <h1>CULTURA GERAL</h1>
         <h3>COMPETIÇÃO</h3>
