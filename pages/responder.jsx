@@ -44,33 +44,11 @@ export default function Home({ sheetData }) {
       </Head>
 
       <main>
-        <Link href="/responder">😀!</Link>
+        <Link href="/"><span>🥇</span></Link>
         <img src='/logo_mc.svg'></img>
         <h1>CULTURA GERAL</h1>
         <h3>COMPETIÇÃO</h3>
-        <table>
-          <thead>
-            <tr>
-              {sheetData.length > 0 &&
-                Object.keys(sheetData[0]).map((key, index) => (
-                  <th key={index}>{key}</th>
-                ))}
-            </tr>
-          </thead>
-          <tbody>
-            {sheetData.map((row, index) => (
-              <tr key={index}>
-                {Object.entries(row).map(([key, value], index) => (
-                  <td key={index}>
-                    <div>
-                    {key === 'Posição' ? renderCircle(value) : value}
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        
       </main>
     </div>
   );
