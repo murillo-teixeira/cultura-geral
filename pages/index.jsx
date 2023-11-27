@@ -2,20 +2,49 @@ import Head from 'next/head';
 
 export default function Home({ sheetData }) {
   // Client-side JavaScript to refresh the page every 5 seconds
-  if (typeof window !== 'undefined') {
-    setTimeout(() => {
-      window.location.reload();
-    }, 10000);
-  }
-  
+  // if (typeof window !== 'undefined') {
+  //   setTimeout(() => {
+  //     window.location.reload();
+  //   }, 10000);
+  // }
+
+  // Function to render the colored circle
+  const renderCircle = (position) => {
+    const circleStyle = {
+      backgroundColor: getColorForPosition(position), // Get color based on position
+      borderRadius: '50%',
+      width: '32px',
+      height: '32px',
+      display: 'flex',
+    };
+
+    return <div style={circleStyle}>{position}</div>;
+  };
+
+  // Function to determine the color based on position
+  const getColorForPosition = (position) => {
+    switch (position) {
+      case '1°': return '#D1B20D';    // Color for 1st position
+      case '2°': return '#B7B6B4';   // Color for 2nd position
+      case '3°': return '#C18D3D';   // Color for 2nd position
+      
+      // Add more cases as needed for different positions
+      default: return 'white';     // Default color
+    }
+  };
+
   return (
     <div>
       <Head>
         <title>Google Sheets Data in Next.js</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet"/>
       </Head>
 
       <main>
-        <h1>Dados do Google Sheets</h1>
+        <h1>CULTURA GERAL</h1>
+        <h3>COMPETIÇÃO</h3>
         <table>
           <thead>
             <tr>
@@ -28,8 +57,12 @@ export default function Home({ sheetData }) {
           <tbody>
             {sheetData.map((row, index) => (
               <tr key={index}>
-                {Object.values(row).map((cell, index) => (
-                  <td key={index}>{cell}</td>
+                {Object.entries(row).map(([key, value], index) => (
+                  <td key={index}>
+                    <div>
+                    {key === 'Posição' ? renderCircle(value) : value}
+                    </div>
+                  </td>
                 ))}
               </tr>
             ))}
