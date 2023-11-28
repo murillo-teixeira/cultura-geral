@@ -51,7 +51,7 @@ export default function Responses({ question_type, server }) {
           console.log('Response:', data);
         })
         .catch((error) => {
-          alert("Erro no envio...")
+          alert("O servidor está fechado!")
           console.error('Error:', error);
         });
     }
