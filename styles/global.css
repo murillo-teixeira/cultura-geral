@@ -104,3 +104,136 @@ span {
   box-shadow: 0 0 5px #FFFFFF;
   font-size: 20px;
 }
+
+.custom-dropdown {
+  width: 100%;
+  padding: 10px; /* Add padding as needed */
+  border-radius: 16px; /* Add rounded corners */
+  border: none; /* Remove the border */
+  outline: none; /* Remove the outline */
+  background-color: #f2f2f2; /* Add a background color */
+  color: #333; /* Add text color */
+  font-size: 16px; /* Set the font size for the dropdown */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+/* Style for dropdown options */
+.custom-dropdown option {
+  padding: 10px; /* Add padding as needed */
+  background-color: #f2f2f2; /* Background color for options */
+  color: #333; /* Text color for options */
+  font-size: 14px; /* Set a smaller font size for options */
+}
+
+/* Style for dropdown on hover */
+.custom-dropdown:hover {
+  background-color: #e0e0e0; /* Change background color on hover */
+}
+
+.group-label, .answer-label{
+  color: white;
+  font-weight: medium;
+}
+
+.answer-label {
+  margin-top: 20px;
+}
+
+.question-label {
+  font-size: 24px;
+}
+
+/* In a separate CSS file or a styled-components style block */
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 10px auto;
+  max-width: 300px; /* Adjust the maximum width as needed */
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.unselected-button, .selected-button {
+  height: 40px;
+  width: 40px;
+}
+
+.unselected-button {
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 50%; /* Make buttons round */
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.selected-button {
+  background-color: #22B5A7; /* Brighter yellow for selected button */
+  color: #fff;
+  border: none;
+  border-radius: 50%; /* Make buttons round */
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.answer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 10px auto;
+  max-width: 300px;
+}
+
+.answer-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.selected-answer, .unselected-answer {
+  width: 30vw;
+  height: 60px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 20px;
+}
+.unselected-answer {
+  background-color: #f2f2f2;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.selected-answer {
+  background-color: rgb(181, 134, 34); /* Brighter yellow for selected button */
+  color: #fff;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.submit-button {
+  font-size: 12px;
+  width: 20vw;
+  height: 30px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.submit-button:active {
+  background-color: #BB3B17;
+  color: white;
+}
