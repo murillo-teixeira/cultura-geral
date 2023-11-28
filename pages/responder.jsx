@@ -104,7 +104,7 @@ export default function Responses({ question_type, server }) {
               <button
                 key={buttonId}
                 value={selectedGroup}
-                className={selectedGroup === buttonId ? 'selected-button' : 'unselected-button'}
+                className={selectedGroup == buttonId ? 'selected-button' : 'unselected-button'}
                 onClick={() => handleGroupSelect(buttonId)}
               >
                 {buttonId}
