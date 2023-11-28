@@ -225,6 +225,7 @@ span {
 .submit-button {
   font-size: 12px;
   width: 20vw;
+  max-width: 100px;
   height: 30px;
   border-radius: 8px;
   font-weight: bold;

@@ -1,10 +1,23 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Responses({ question_type, server }) {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState('');
+
+  // Load the selected group from localStorage when the component mounts
+  useEffect(() => {
+    const savedGroup = localStorage.getItem('ccg2023-selected-group');
+    if (savedGroup) {
+      setSelectedGroup(savedGroup);
+    }
+  }, []);
+
+  // Save the selected group to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('ccg2023-selected-group', selectedGroup);
+  }, [selectedGroup]);
 
   const handleGroupSelect = (group) => {
     if (selectedAnswer === group) {
@@ -78,7 +91,8 @@ export default function Responses({ question_type, server }) {
             {[1, 2, 3, 4, 5].map((buttonId) => (
               <button
                 key={buttonId}
-                className={selectedGroup === buttonId ? 'selected-button' : 'unselected-button'}
+                value={selectedGroup}
+                className={selectedGroup == buttonId ? 'selected-button' : 'unselected-button'}
                 onClick={() => handleGroupSelect(buttonId)}
               >
                 {buttonId}
@@ -89,6 +103,7 @@ export default function Responses({ question_type, server }) {
             {[6, 7, 8, 9, 10].map((buttonId) => (
               <button
                 key={buttonId}
+                value={selectedGroup}
                 className={selectedGroup === buttonId ? 'selected-button' : 'unselected-button'}
                 onClick={() => handleGroupSelect(buttonId)}
               >
