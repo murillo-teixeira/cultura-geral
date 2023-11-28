@@ -9,6 +9,7 @@ body {
   background-color: #433D75;
   display: flex;
   justify-content: center;
+  color: #000000;
 }
 
 main {
@@ -217,7 +218,7 @@ span {
   margin: 5px;
 }
 
-.submit-button {
+.submit-button, .submit-button-disabled {
   font-size: 12px;
   width: 20vw;
   max-width: 100px;
@@ -233,6 +234,7 @@ span {
   background-color: #BB3B17;
   color: white;
 }
+
 .text-answer-input {
   width: 100%;
   min-width: 250px;

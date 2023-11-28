@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 export default function Responses({ question_type, server }) {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [isButtonCooldown, setIsButtonCooldown] = useState(false);
 
   // Load the selected group from localStorage when the component mounts
   useEffect(() => {
@@ -41,6 +42,10 @@ export default function Responses({ question_type, server }) {
   };
 
   const handleSubmit = () => {
+    if (isButtonCooldown) {
+      alert('Por favor, aguarde 2 segundos antes de enviar novamente.');
+      return;
+    }
     // Create a POST request with the selected group and answer
     if(!selectedGroup || !selectedAnswer) 
       alert("Verifique se ambos os campos estão preenchidos")
@@ -67,6 +72,12 @@ export default function Responses({ question_type, server }) {
           alert("O servidor está fechado!")
           console.error('Error:', error);
         });
+      
+        // Set button to cooldown state
+      setIsButtonCooldown(true);
+
+      // Reset cooldown state after 2 seconds
+      setTimeout(() => setIsButtonCooldown(false), 2000);
     }
   };
 
@@ -152,7 +163,7 @@ export default function Responses({ question_type, server }) {
       </>
     )}
       
-      <button className="submit-button" onClick={handleSubmit}>
+      <button className="submit-button" disabled={isButtonCooldown} onClick={handleSubmit}>
               Enviar
             </button>  
       </main>
