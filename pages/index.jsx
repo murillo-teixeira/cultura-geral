@@ -101,6 +101,6 @@ export async function getStaticProps() {
     props: {
       sheetData,
     },
-    revalidate: 10, // Atualiza a página a cada 10 segundos
+    revalidate: 5, // Atualiza a página a cada 10 segundos
   };
 }
