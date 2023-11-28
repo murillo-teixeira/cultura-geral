@@ -14,7 +14,7 @@ export default function Responses({ question_type, server }) {
     }
   };
 
-  const handleAnswerSelect = (answer, server) => {
+  const handleAnswerSelect = (answer) => {
     if (selectedAnswer === answer) {
       setSelectedAnswer(null);
     } else {
@@ -22,30 +22,39 @@ export default function Responses({ question_type, server }) {
     }
   };
 
+  const handleAnswerChange = (event) => {
+    // Update the text answer state when the text input changes
+    setSelectedAnswer(event.target.value);
+  };
+
   const handleSubmit = () => {
     // Create a POST request with the selected group and answer
-    const requestBody = {
-      group: selectedGroup,
-      answer: selectedAnswer,
-    };
+    if(!selectedGroup || !selectedAnswer) 
+      alert("Verifique se ambos os campos estão preenchidos")
+    else {
+      const requestBody = {
+        group: selectedGroup,
+        answer: selectedAnswer,
+      };
 
-    // Send the POST request to your desired endpoint
-    fetch(server + '/submit', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        alert("Envio ok")
-        console.log('Response:', data);
+      // Send the POST request to your desired endpoint
+      fetch(server + '/submit', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-      .catch((error) => {
-        alert("Erro")
-        console.error('Error:', error);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          alert("Resposta enviada!")
+          console.log('Response:', data);
+        })
+        .catch((error) => {
+          alert("Erro no envio...")
+          console.error('Error:', error);
+        });
+    }
   };
 
   return (
@@ -88,35 +97,49 @@ export default function Responses({ question_type, server }) {
             ))}
           </div>
         </div>
-        {/* <div className="question-label">{question_name}</div> */}
-        <div className="answer-label">Selecione a resposta</div>
-        <div className="answer-container">
-          <div className="answer-row">
-            {['A', 'B'].map((answer) => (
-              <button
-                key={answer}
-                className={selectedAnswer === answer ? 'selected-answer' : 'unselected-answer'}
-                onClick={() => handleAnswerSelect(answer)}
-              >
-                {answer}
-              </button>
-            ))}
-          </div>
-          <div className="answer-row">
-            {['C', 'D'].map((answer) => (
-              <button
-                key={answer}
-                className={selectedAnswer === answer ? 'selected-answer' : 'unselected-answer'}
-                onClick={() => handleAnswerSelect(answer)}
-              >
-                {answer}
-              </button>
-            ))}
-          </div>
-        </div>
-        <button className="submit-button" onClick={handleSubmit}>
-          Enviar
-        </button>
+    {question_type == 'M' ? (<>
+      <div className="answer-label">Selecione a resposta</div>
+            <div className="answer-container">
+              <div className="answer-row">
+                {['A', 'B'].map((answer) => (
+                  <button
+                    key={answer}
+                    className={selectedAnswer === answer ? 'selected-answer' : 'unselected-answer'}
+                    onClick={() => handleAnswerSelect(answer)}
+                  >
+                    {answer}
+                  </button>
+                ))}
+              </div>
+              <div className="answer-row">
+                {['C', 'D'].map((answer) => (
+                  <button
+                    key={answer}
+                    className={selectedAnswer === answer ? 'selected-answer' : 'unselected-answer'}
+                    onClick={() => handleAnswerSelect(answer)}
+                  >
+                    {answer}
+                  </button>
+                ))}
+              </div>
+            </div>
+            </>
+    ) : (
+      // Render the text input when question_type is 'A'
+      <><div className="answer-label">Digite a resposta:</div>
+      <div className="text-answer-container">
+        <input
+          type="text"
+          onChange={handleAnswerChange}
+          className="text-answer-input"
+        />
+      </div>
+      </>
+    )}
+      
+      <button className="submit-button" onClick={handleSubmit}>
+              Enviar
+            </button>  
       </main>
     </div>
   );
