@@ -28,9 +28,9 @@ export default function Home({ sheetData }) {
       case '1°': return '#D1B20D';    // Color for 1st position
       case '2°': return '#B7B6B4';   // Color for 2nd position
       case '3°': return '#C18D3D';   
-      case '4°': return '#66a3cf';
-      case '5°': return '#66a3cf';
-      case '6°': return '#66a3cf';
+      case '4°': return '#83bfea';
+      case '5°': return '#83bfea';
+      case '6°': return '#83bfea';
       
       // Add more cases as needed for different positions
       default: return 'white';     // Default color
