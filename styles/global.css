@@ -113,8 +113,7 @@ span {
   outline: none; /* Remove the outline */
   background-color: #f2f2f2; /* Add a background color */
   color: #333; /* Add text color */
-  font-size: 16px; /* Set the font size for the dropdown */
-  cursor: pointer; /* Change cursor on hover */
+  font-size: 16px; /* Set the font size for the dropdown */ /* Change cursor on hover */
 }
 
 /* Style for dropdown options */
@@ -171,7 +170,6 @@ span {
   border-radius: 50%; /* Make buttons round */
   padding: 10px;
   margin: 5px;
-  cursor: pointer;
 }
 
 .selected-button {
@@ -181,7 +179,6 @@ span {
   border-radius: 50%; /* Make buttons round */
   padding: 10px;
   margin: 5px;
-  cursor: pointer;
 }
 
 .answer-container {
@@ -210,7 +207,6 @@ span {
   border: none;
   padding: 10px;
   margin: 5px;
-  cursor: pointer;
 }
 
 .selected-answer {
@@ -219,7 +215,6 @@ span {
   border: none;
   padding: 10px;
   margin: 5px;
-  cursor: pointer;
 }
 
 .submit-button {
@@ -231,7 +226,6 @@ span {
   font-weight: bold;
   font-size: 16px;
   margin-top: 10px;
-  cursor: pointer;
   border: none;
 }
 
