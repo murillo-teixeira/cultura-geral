@@ -17,6 +17,7 @@ main {
   display: flex;
   align-items: center;
   flex-direction: column;
+  padding-bottom: 40px;
 }
 
 h1 {
@@ -130,9 +131,14 @@ span {
   background-color: #e0e0e0; /* Change background color on hover */
 }
 
-.group-label, .answer-label{
+.group-label, .answer-label, .guests-label {
   color: white;
   font-weight: medium;
+}
+
+.guests-label {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .answer-label {

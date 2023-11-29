@@ -1,13 +1,24 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 export default function Home({ sheetData }) {
+  const [isGuest, setIsGuest] = useState(false);
+  
   // Client-side JavaScript to refresh the page every 5 seconds
   if (typeof window !== 'undefined') {
     setTimeout(() => {
       window.location.reload();
     }, 10000);
   }
+
+  useEffect(() => {
+    const savedGroup = localStorage.getItem('ccg2023-selected-group');
+    if (savedGroup && savedGroup > 10) {
+      setIsGuest(true);
+      console.log("Convidado");
+    }
+  }, []);
 
   // Function to render the colored circle
   const renderCircle = (position) => {
@@ -49,7 +60,7 @@ export default function Home({ sheetData }) {
       </Head>
 
       <main>
-      <Link href="/responder"><span>🔠</span></Link>
+      <Link href={isGuest ? "/convidado" : "/responder"}><span>🔠</span></Link>
         <img src='/logo_mc.svg'></img>
         <h1>CULTURA GERAL</h1>
         <h3>COMPETIÇÃO</h3>
@@ -63,7 +74,7 @@ export default function Home({ sheetData }) {
             </tr>
           </thead>
           <tbody>
-            {sheetData.map((row, index) => (
+            {sheetData.slice(0, 10).map((row, index) => (
               <tr key={index}>
                 {Object.entries(row).map(([key, value], index) => (
                   <td key={index}>
@@ -76,6 +87,34 @@ export default function Home({ sheetData }) {
             ))}
           </tbody>
         </table>
+        {sheetData.length > 10 && (
+        <>
+        <div className="guests-label">Convidados</div>
+        <table>
+          <thead>
+            <tr>
+              {sheetData.length > 0 &&
+                Object.keys(sheetData[0]).map((key, index) => (
+                  <th key={index}>{key}</th>
+                ))}
+            </tr>
+          </thead>
+          <tbody>
+            {sheetData.slice(10, 20).map((row, index) => (
+              <tr key={index}>
+                {Object.entries(row).map(([key, value], index) => (
+                  <td key={index}>
+                    <div>
+                    {key === 'Posição' ? renderCircle(value) : value}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </>
+        )}
       </main>
     </div>
   );
