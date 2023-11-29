@@ -3,14 +3,15 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 export default function Responses({ question_type, server }) {
-  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isButtonCooldown, setIsButtonCooldown] = useState(false);
 
   // Load the selected group from localStorage when the component mounts
   useEffect(() => {
     const savedGroup = localStorage.getItem('ccg2023-selected-group');
-    if (savedGroup) {
+    if (savedGroup > 0) {
+      console.log(savedGroup)
       setSelectedGroup(savedGroup);
     }
   }, []);
@@ -105,6 +106,7 @@ export default function Responses({ question_type, server }) {
                 value={selectedGroup}
                 className={selectedGroup == buttonId ? 'selected-button' : 'unselected-button'}
                 onClick={() => handleGroupSelect(buttonId)}
+                disabled={selectedGroup > 0}
               >
                 {buttonId}
               </button>
@@ -117,6 +119,7 @@ export default function Responses({ question_type, server }) {
                 value={selectedGroup}
                 className={selectedGroup == buttonId ? 'selected-button' : 'unselected-button'}
                 onClick={() => handleGroupSelect(buttonId)}
+                disabled={selectedGroup > 0}
               >
                 {buttonId}
               </button>
