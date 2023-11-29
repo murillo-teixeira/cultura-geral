@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-export default function Home({ sheetData }) {
+export default function Home({ sheetData, number_of_participants }) {
   const [isGuest, setIsGuest] = useState(false);
   
   // Client-side JavaScript to refresh the page every 5 seconds
@@ -74,7 +74,7 @@ export default function Home({ sheetData }) {
             </tr>
           </thead>
           <tbody>
-            {sheetData.slice(0, 10).map((row, index) => (
+            {sheetData.slice(0, number_of_participants).map((row, index) => (
               <tr key={index}>
                 {Object.entries(row).map(([key, value], index) => (
                   <td key={index}>
@@ -87,7 +87,7 @@ export default function Home({ sheetData }) {
             ))}
           </tbody>
         </table>
-        {sheetData.length > 10 && (
+        {sheetData.length > number_of_participants && (
         <>
         <div className="guests-label">Convidados</div>
         <table>
@@ -100,7 +100,7 @@ export default function Home({ sheetData }) {
             </tr>
           </thead>
           <tbody>
-            {sheetData.slice(10, 20).map((row, index) => (
+            {sheetData.slice(number_of_participants, 20).map((row, index) => (
               <tr key={index}>
                 {Object.entries(row).map(([key, value], index) => (
                   <td key={index}>
@@ -128,7 +128,6 @@ export async function getStaticProps() {
   const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`); // URL da sua API Next.js
   
   const data = await res.json();
-  console.log(data)
 
   const headers = data.values[0];
   const sheetData = data.values.slice(1).map(row => {
@@ -139,9 +138,16 @@ export async function getStaticProps() {
     return rowData;
   });
 
+  const range2 = 'Atual!B3';
+
+  const res2 = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range2}?key=${apiKey}`); // URL da sua API Next.js
+  const data2 = await res2.json();
+  const number_of_participants = data2.values[0][0];
+  
   return {
     props: {
       sheetData,
+      number_of_participants
     },
     revalidate: 5, // Atualiza a página a cada 10 segundos
   };
