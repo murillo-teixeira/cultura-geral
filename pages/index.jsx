@@ -3,20 +3,69 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import usePageVisibility from '../hooks/usePageVisibility';
 
-export default function Home({ sheetData, number_of_participants }) {
+export default function Home({ sheetData, number_of_participants, reset_state, server }) {
   const [isGuest, setIsGuest] = useState(false);
-  const [wasPageOnBackground, setWasPageOnBackground] = useState(false);
+  const [wasPageOnBackground, setWasPageOnBackground] = useState('n');
+  const [selectedGroup, setSelectedGroup] = useState(0);
+  const [cheatingAlertWasSent, setCheatingAlertWasSent] = useState('n');
 
   usePageVisibility(setWasPageOnBackground);
+  
+  useEffect(() => {
+    if (reset_state === 'ok') {
+      setWasPageOnBackground('n');
+      setCheatingAlertWasSent('n')
+      localStorage.setItem('ccg2023-eliminated', 'n');
+      localStorage.setItem('ccg2023-eliminated-alert', 'n');
+    }
+  }, [reset_state]);
 
   useEffect(() => {
-    if (wasPageOnBackground) {
-      console.log('Sending state change to backend');
-      // Code to send data to backend
-      // For example, using fetch or axios to make a POST request
+    if (wasPageOnBackground == 'y') {
+      localStorage.setItem('ccg2023-eliminated', 'y');
+    }
+    if (wasPageOnBackground == 'y' && cheatingAlertWasSent == 'n') {
+      setCheatingAlertWasSent('y');
+      localStorage.setItem('ccg2023-eliminated-alert', 'y');
+      const requestBody = {
+        group: selectedGroup,
+      };
+
+      // Send the POST request to your desired endpoint
+      fetch(server + '/cheater', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Response:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+
     }
   }, [wasPageOnBackground]);
-  
+
+  // Load the selected group from localStorage when the component mounts
+  useEffect(() => {
+    const savedGroup = localStorage.getItem('ccg2023-selected-group');
+    if (savedGroup > 0) {
+      setSelectedGroup(savedGroup);
+    }
+    const eliminated = localStorage.getItem('ccg2023-eliminated');
+    setWasPageOnBackground(eliminated);
+
+    const eliminatedAlert = localStorage.getItem('ccg2023-eliminated-alert');
+    setCheatingAlertWasSent(eliminatedAlert);
+    // if (eliminated == 'y') {
+    //   setWasPageOnBackground('y');
+    // }
+  }, []);
+
   // Client-side JavaScript to refresh the page every 5 seconds
   if (typeof window !== 'undefined') {
     setTimeout(() => {
@@ -150,16 +199,20 @@ export async function getStaticProps() {
     return rowData;
   });
 
-  const range2 = 'Atual!B3';
+  const range2 = 'Atual!B1:B4';
 
   const res2 = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range2}?key=${apiKey}`); // URL da sua API Next.js
   const data2 = await res2.json();
-  const number_of_participants = data2.values[0][0];
-  
+  const number_of_participants = data2.values[2][0];
+  const reset_state = data2.values[3][0];
+  const server = data2.values[1][0];
+
   return {
     props: {
       sheetData,
-      number_of_participants
+      number_of_participants,
+      reset_state,
+      server
     },
     revalidate: 5, // Atualiza a página a cada 10 segundos
   };

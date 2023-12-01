@@ -6,7 +6,8 @@ const usePageVisibility = (setWasPageOnBackground) => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
         console.log('Page is now in the background');
-        setWasPageOnBackground(true);
+        setWasPageOnBackground('y');
+        console.log("changed state")
       }
     };
 

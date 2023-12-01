@@ -8,21 +8,27 @@ export default function Responses({ question_type, server, reset_state }) {
   const [selectedGroup, setSelectedGroup] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isButtonCooldown, setIsButtonCooldown] = useState(false);
-  const [wasPageOnBackground, setWasPageOnBackground] = useState(false);
+  const [wasPageOnBackground, setWasPageOnBackground] = useState('n');
+  const [cheatingAlertWasSent, setCheatingAlertWasSent] = useState('n');
 
   usePageVisibility(setWasPageOnBackground);
   
   useEffect(() => {
     if (reset_state === 'ok') {
-      console.log(reset_state)
-      console.log(wasPageOnBackground)
-      setWasPageOnBackground(false);
+      setWasPageOnBackground('n');
+      setCheatingAlertWasSent('n')
+      localStorage.setItem('ccg2023-eliminated', 'n');
+      localStorage.setItem('ccg2023-eliminated-alert', 'n');
     }
   }, [reset_state]);
 
   useEffect(() => {
-    if (wasPageOnBackground) {
-      console.log('Sending state change to backend');
+    if (wasPageOnBackground == 'y') {
+      localStorage.setItem('ccg2023-eliminated', 'y');
+    }
+    if (wasPageOnBackground == 'y' && cheatingAlertWasSent == 'n') {
+      setCheatingAlertWasSent('y');
+      localStorage.setItem('ccg2023-eliminated-alert', 'y');
       const requestBody = {
         group: selectedGroup,
       };
@@ -42,7 +48,6 @@ export default function Responses({ question_type, server, reset_state }) {
         .catch((error) => {
           console.error('Error:', error);
         });
-
     }
   }, [wasPageOnBackground]);
 
@@ -52,6 +57,11 @@ export default function Responses({ question_type, server, reset_state }) {
     if (savedGroup > 0) {
       setSelectedGroup(savedGroup);
     }
+    const eliminated = localStorage.getItem('ccg2023-eliminated');
+    setWasPageOnBackground(eliminated);
+
+    const eliminatedAlert = localStorage.getItem('ccg2023-eliminated-alert');
+    setCheatingAlertWasSent(eliminatedAlert);
   }, []);
 
   // Save the selected group to localStorage whenever it changes
@@ -132,7 +142,7 @@ export default function Responses({ question_type, server, reset_state }) {
 
       <main>
         <Link href="/"><span>🥇</span></Link>
-        { !wasPageOnBackground ? 
+        { wasPageOnBackground == 'n' ? 
         (<>
         <img src='/logo_mc.svg'></img>
         <h1>CULTURA GERAL</h1>
@@ -226,11 +236,10 @@ export async function getStaticProps() {
   const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`); // URL da sua API Next.js
   
   const data = await res.json();
-  console.log(data)
 
   const question_type = data.values[0][0];
   const server = data.values[1][0];
-  const reset_state = data.values[3][0]
+  const reset_state = data.values[3][0];
 
   return {
     props: {
