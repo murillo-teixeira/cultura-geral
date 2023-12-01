@@ -12,7 +12,7 @@ export default function Home({ sheetData, number_of_participants, reset_state, s
   usePageVisibility(setWasPageOnBackground);
   
   useEffect(() => {
-    if (reset_state === 'ok') {
+    if (reset_state === 'on') {
       setWasPageOnBackground('n');
       setCheatingAlertWasSent('n')
       localStorage.setItem('ccg2023-eliminated', 'n');

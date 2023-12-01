@@ -14,7 +14,7 @@ export default function Responses({ question_type, server, reset_state }) {
   usePageVisibility(setWasPageOnBackground);
   
   useEffect(() => {
-    if (reset_state === 'ok') {
+    if (reset_state === 'on') {
       setWasPageOnBackground('n');
       setCheatingAlertWasSent('n')
       localStorage.setItem('ccg2023-eliminated', 'n');

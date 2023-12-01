@@ -1,19 +1,67 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import usePageVisibility from '../hooks/usePageVisibility';
 
-export default function Responses({ question_type, server }) {
+
+export default function Responses({ question_type, server, reset_state }) {
   const [selectedGroup, setSelectedGroup] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isButtonCooldown, setIsButtonCooldown] = useState(false);
+  const [wasPageOnBackground, setWasPageOnBackground] = useState('n');
+  const [cheatingAlertWasSent, setCheatingAlertWasSent] = useState('n');
+
+  usePageVisibility(setWasPageOnBackground);
+  
+  useEffect(() => {
+    if (reset_state === 'on') {
+      setWasPageOnBackground('n');
+      setCheatingAlertWasSent('n')
+      localStorage.setItem('ccg2023-eliminated', 'n');
+      localStorage.setItem('ccg2023-eliminated-alert', 'n');
+    }
+  }, [reset_state]);
+
+  useEffect(() => {
+    if (wasPageOnBackground == 'y') {
+      localStorage.setItem('ccg2023-eliminated', 'y');
+    }
+    if (wasPageOnBackground == 'y' && cheatingAlertWasSent == 'n') {
+      setCheatingAlertWasSent('y');
+      localStorage.setItem('ccg2023-eliminated-alert', 'y');
+      const requestBody = {
+        group: selectedGroup,
+      };
+
+      // Send the POST request to your desired endpoint
+      fetch(server + '/cheater', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Response:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+  }, [wasPageOnBackground]);
 
   // Load the selected group from localStorage when the component mounts
   useEffect(() => {
     const savedGroup = localStorage.getItem('ccg2023-selected-group');
     if (savedGroup > 0) {
-      console.log(savedGroup)
       setSelectedGroup(savedGroup);
     }
+    const eliminated = localStorage.getItem('ccg2023-eliminated');
+    setWasPageOnBackground(eliminated);
+
+    const eliminatedAlert = localStorage.getItem('ccg2023-eliminated-alert');
+    setCheatingAlertWasSent(eliminatedAlert);
   }, []);
 
   // Save the selected group to localStorage whenever it changes
@@ -94,6 +142,8 @@ export default function Responses({ question_type, server }) {
 
       <main>
         <Link href="/"><span>🥇</span></Link>
+        { wasPageOnBackground == 'n' ? 
+        (<>
         <img src='/logo_mc.svg'></img>
         <h1>CULTURA GERAL</h1>
         <h3>COMPETIÇÃO</h3>
@@ -126,49 +176,53 @@ export default function Responses({ question_type, server }) {
             ))}
           </div>
         </div>
-    {question_type == 'M' ? (<>
-      <div className="answer-label">Selecione a resposta</div>
-            <div className="answer-container">
-              <div className="answer-row">
-                {['A', 'B'].map((answer) => (
-                  <button
-                    key={answer}
-                    className={selectedAnswer === answer ? 'selected-answer' : 'unselected-answer'}
-                    onClick={() => handleAnswerSelect(answer)}
-                  >
-                    {answer}
-                  </button>
-                ))}
-              </div>
-              <div className="answer-row">
-                {['C', 'D'].map((answer) => (
-                  <button
-                    key={answer}
-                    className={selectedAnswer === answer ? 'selected-answer' : 'unselected-answer'}
-                    onClick={() => handleAnswerSelect(answer)}
-                  >
-                    {answer}
-                  </button>
-                ))}
-              </div>
-            </div>
-            </>
-    ) : (
-      // Render the text input when question_type is 'A'
-      <><div className="answer-label">Digite a resposta:</div>
-      <div className="text-answer-container">
-        <input
-          type="text"
-          onChange={handleAnswerChange}
-          className="text-answer-input"
-        />
-      </div>
-      </>
-    )}
+        {question_type == 'M' ? (<>
+          <div className="answer-label">Selecione a resposta</div>
+                <div className="answer-container">
+                  <div className="answer-row">
+                    {['A', 'B'].map((answer) => (
+                      <button
+                        key={answer}
+                        className={selectedAnswer === answer ? 'selected-answer' : 'unselected-answer'}
+                        onClick={() => handleAnswerSelect(answer)}
+                      >
+                        {answer}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="answer-row">
+                    {['C', 'D'].map((answer) => (
+                      <button
+                        key={answer}
+                        className={selectedAnswer === answer ? 'selected-answer' : 'unselected-answer'}
+                        onClick={() => handleAnswerSelect(answer)}
+                      >
+                        {answer}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                </>
+        ) : (
+          // Render the text input when question_type is 'A'
+          <><div className="answer-label">Digite a resposta:</div>
+          <div className="text-answer-container">
+            <input
+              type="text"
+              onChange={handleAnswerChange}
+              className="text-answer-input"
+            />
+          </div>
+          </>
+        )}
       
-      <button className="submit-button" disabled={isButtonCooldown} onClick={handleSubmit}>
-              Enviar
-            </button>  
+        <button className="submit-button" disabled={isButtonCooldown} onClick={handleSubmit}>
+          Enviar
+        </button>
+        </>)
+        :
+        <div className='eliminado'>Eliminado</div>  
+      }
       </main>
     </div>
   );
@@ -177,21 +231,21 @@ export default function Responses({ question_type, server }) {
 export async function getStaticProps() {
   const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
   const sheetId = process.env.GOOGLE_SHEETS_ID;
-  const range = 'Atual!B1:B2';
+  const range = 'Atual!B1:B4';
 
   const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`); // URL da sua API Next.js
   
   const data = await res.json();
-  console.log(data)
 
   const question_type = data.values[0][0];
   const server = data.values[1][0];
-
-  console.log(question_type, server)
+  const reset_state = data.values[3][0];
 
   return {
     props: {
-      question_type, server
+      question_type, 
+      server,
+      reset_state
     },
     revalidate: 5, // Atualiza a página a cada 10 segundos
   };
