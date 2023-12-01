@@ -1,9 +1,21 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import usePageVisibility from '../hooks/usePageVisibility';
 
 export default function Home({ sheetData, number_of_participants }) {
   const [isGuest, setIsGuest] = useState(false);
+  const [wasPageOnBackground, setWasPageOnBackground] = useState(false);
+
+  usePageVisibility(setWasPageOnBackground);
+
+  useEffect(() => {
+    if (wasPageOnBackground) {
+      console.log('Sending state change to backend');
+      // Code to send data to backend
+      // For example, using fetch or axios to make a POST request
+    }
+  }, [wasPageOnBackground]);
   
   // Client-side JavaScript to refresh the page every 5 seconds
   if (typeof window !== 'undefined') {
