@@ -12,6 +12,8 @@ export default function Responses({ question_type, server }) {
       localStorage.removeItem('ccg2023-selected-group')
       setWasGroupSaved(true)
     }
+    localStorage.setItem('ccg2023-eliminated', 'n')
+    localStorage.setItem('ccg2023-eliminated-alert', 'n')
   }, []);
 
   return (
