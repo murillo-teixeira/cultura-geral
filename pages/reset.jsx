@@ -10,10 +10,13 @@ export default function Responses({ question_type, server }) {
     const savedGroup = localStorage.getItem('ccg2023-selected-group');
     if (savedGroup) {
       localStorage.removeItem('ccg2023-selected-group')
+      localStorage.removeItem('ccg2023-selected-group-day2')
       setWasGroupSaved(true)
     }
     localStorage.setItem('ccg2023-eliminated', 'n')
     localStorage.setItem('ccg2023-eliminated-alert', 'n')
+    localStorage.setItem('ccg2023-eliminated-day2', 'n')
+    localStorage.setItem('ccg2023-eliminated-alert-day2', 'n')
   }, []);
 
   return (

@@ -17,18 +17,18 @@ export default function Responses({ question_type, server, reset_state }) {
     if (reset_state === 'on') {
       setWasPageOnBackground('n');
       setCheatingAlertWasSent('n')
-      localStorage.setItem('ccg2023-eliminated', 'n');
-      localStorage.setItem('ccg2023-eliminated-alert', 'n');
+      localStorage.setItem('ccg2023-eliminated-day2', 'n');
+      localStorage.setItem('ccg2023-eliminated-alert-day2', 'n');
     }
   }, [reset_state]);
 
   useEffect(() => {
     if (wasPageOnBackground == 'y') {
-      localStorage.setItem('ccg2023-eliminated', 'y');
+      localStorage.setItem('ccg2023-eliminated-day2', 'y');
     }
     if (wasPageOnBackground == 'y' && cheatingAlertWasSent == 'n') {
       setCheatingAlertWasSent('y');
-      localStorage.setItem('ccg2023-eliminated-alert', 'y');
+      localStorage.setItem('ccg2023-eliminated-alert-day2', 'y');
       const requestBody = {
         group: selectedGroup,
       };
@@ -53,20 +53,20 @@ export default function Responses({ question_type, server, reset_state }) {
 
   // Load the selected group from localStorage when the component mounts
   useEffect(() => {
-    const savedGroup = localStorage.getItem('ccg2023-selected-group');
+    const savedGroup = localStorage.getItem('ccg2023-selected-group-day2');
     if (savedGroup > 0) {
       setSelectedGroup(savedGroup);
     }
-    const eliminated = localStorage.getItem('ccg2023-eliminated');
+    const eliminated = localStorage.getItem('ccg2023-eliminated-day2');
     setWasPageOnBackground(eliminated);
 
-    const eliminatedAlert = localStorage.getItem('ccg2023-eliminated-alert');
+    const eliminatedAlert = localStorage.getItem('ccg2023-eliminated-alert-day2');
     setCheatingAlertWasSent(eliminatedAlert);
   }, []);
 
   // Save the selected group to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('ccg2023-selected-group', selectedGroup);
+    localStorage.setItem('ccg2023-selected-group-day2', selectedGroup);
   }, [selectedGroup]);
 
   const handleGroupSelect = (group) => {
