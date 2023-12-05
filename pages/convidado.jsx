@@ -2,14 +2,33 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import usePageVisibility from '../hooks/usePageVisibility';
+import NameModal from '../components/NameModal';
 
-
-export default function Responses({ question_type, server, reset_state }) {
-  const [selectedGroup, setSelectedGroup] = useState(0);
+export default function Responses({ question_type, number_of_participants, server, reset_state, participantes, convidados }) {
+  const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isButtonCooldown, setIsButtonCooldown] = useState(false);
   const [wasPageOnBackground, setWasPageOnBackground] = useState('n');
   const [cheatingAlertWasSent, setCheatingAlertWasSent] = useState('n');
+
+  const [showModal, setShowModal] = useState(false);
+
+  // Function to open the modal
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  // Function to close the modal
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  // Function to handle selecting a name from the modal
+  const handleSelectName = (name) => {
+    const idx = convidados.indexOf(name)
+    setSelectedGroup(idx + 11);
+    closeModal();
+  };
 
   usePageVisibility(setWasPageOnBackground);
   
@@ -68,14 +87,6 @@ export default function Responses({ question_type, server, reset_state }) {
   useEffect(() => {
     localStorage.setItem('ccg2023-selected-group', selectedGroup);
   }, [selectedGroup]);
-
-  const handleGroupSelect = (group) => {
-    if (selectedAnswer === group) {
-      setSelectedGroup(null);
-    } else {
-      setSelectedGroup(group);
-    }
-  };
 
   const handleAnswerSelect = (answer) => {
     if (selectedAnswer === answer) {
@@ -147,35 +158,19 @@ export default function Responses({ question_type, server, reset_state }) {
         <img src='/logo_mc.svg'></img>
         <h1>CULTURA GERAL</h1>
         <h3>COMPETIÇÃO</h3>
-        <div className="group-label">Selecione a equipa</div>
-        <div className="button-container">
-          <div className="button-row">
-            {[11, 12, 13, 14, 15].map((buttonId) => (
-              <button
-                key={buttonId}
-                value={selectedGroup}
-                className={selectedGroup == buttonId ? 'selected-button' : 'unselected-button'}
-                onClick={() => handleGroupSelect(buttonId)}
-                disabled={selectedGroup > 0}
-              >
-                {buttonId}
-              </button>
-            ))}
-          </div>
-          <div className="button-row">
-            {[16, 17, 18, 19, 20].map((buttonId) => (
-              <button
-                key={buttonId}
-                value={selectedGroup}
-                className={selectedGroup == buttonId ? 'selected-button' : 'unselected-button'}
-                onClick={() => handleGroupSelect(buttonId)}
-                disabled={selectedGroup > 0}
-              >
-                {buttonId}
-              </button>
-            ))}
-          </div>
+        <div className="group-label">
+          {selectedGroup ?
+            <p>{convidados[selectedGroup - 11]}</p>
+            : 
+            <button onClick={openModal}>Selecione seu nome</button>  
+          }
         </div>
+        
+
+        {showModal && (
+          <NameModal names={convidados} onSelectName={handleSelectName} onClose={closeModal} />
+        )}
+
         {question_type == 'M' ? (<>
           <div className="answer-label">Selecione a resposta</div>
                 <div className="answer-container">
@@ -234,18 +229,29 @@ export async function getStaticProps() {
   const range = 'Atual!B1:B4';
 
   const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`); // URL da sua API Next.js
-  
   const data = await res.json();
 
   const question_type = data.values[0][0];
   const server = data.values[1][0];
   const reset_state = data.values[3][0];
+  const number_of_participants = data.values[2][0];
 
+
+  const range2 = 'Respostas!A3:D50';
+  const res2 = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range2}?key=${apiKey}`); // URL da sua API Next.js
+  const data2 = await res2.json();
+  
+  const participantes = data2.values.filter(item => item[3] === 'Participante').map(item => item[0]);;
+  const convidados = data2.values.filter(item => item[3] === 'Convidado').map(item => item[0]);;
+  
   return {
     props: {
       question_type, 
+      number_of_participants,
       server,
-      reset_state
+      reset_state,
+      participantes,
+      convidados
     },
     revalidate: 5, // Atualiza a página a cada 10 segundos
   };

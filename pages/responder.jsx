@@ -5,7 +5,7 @@ import usePageVisibility from '../hooks/usePageVisibility';
 
 
 export default function Responses({ question_type, server, reset_state }) {
-  const [selectedGroup, setSelectedGroup] = useState(0);
+  const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isButtonCooldown, setIsButtonCooldown] = useState(false);
   const [wasPageOnBackground, setWasPageOnBackground] = useState('n');
@@ -150,7 +150,7 @@ export default function Responses({ question_type, server, reset_state }) {
         <div className="group-label">Selecione a equipa</div>
         <div className="button-container">
           <div className="button-row">
-            {[1, 2, 3, 4, 5].map((buttonId) => (
+            {[1, 2, 3, 4].map((buttonId) => (
               <button
                 key={buttonId}
                 value={selectedGroup}
@@ -163,7 +163,7 @@ export default function Responses({ question_type, server, reset_state }) {
             ))}
           </div>
           <div className="button-row">
-            {[6, 7, 8, 9, 10].map((buttonId) => (
+            {[7, 10].map((buttonId) => (
               <button
                 key={buttonId}
                 value={selectedGroup}
