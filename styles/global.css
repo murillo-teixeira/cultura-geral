@@ -33,6 +33,23 @@ body {
   color: #e0e0e0;
 }
 
+.final-phase {
+  height: 100vh;
+  width: 100vw;
+  background-color: #b8b8b8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  font-weight: medium;
+  color: #ffffff;
+}
+
+.final-phase p {
+  text-align: center;
+  width: 100%;
+}
+
 h1 {
   color: white;
   font-size: 40px;

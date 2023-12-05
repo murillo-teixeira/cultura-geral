@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import usePageVisibility from '../hooks/usePageVisibility';
 
-export default function Home({ sheetData, number_of_participants, reset_state, server }) {
+export default function Home({ sheetData, number_of_participants, reset_state, server, already_final }) {
   const [isGuest, setIsGuest] = useState(false);
   const [wasPageOnBackground, setWasPageOnBackground] = useState('n');
   const [selectedGroup, setSelectedGroup] = useState(0);
@@ -119,8 +119,8 @@ export default function Home({ sheetData, number_of_participants, reset_state, s
         <link rel="shortcut icon" href="/logo_mc_preto.svg" />
 
       </Head>
-
       <main>
+    {already_final ? <>
       <Link href={isGuest ? "/convidado" : "/responder"}><span>🔠</span></Link>
         <img src='/logo_mc.svg'></img>
         <h1>CULTURA GERAL</h1>
@@ -161,7 +161,7 @@ export default function Home({ sheetData, number_of_participants, reset_state, s
             </tr>
           </thead>
           <tbody>
-            {sheetData.slice(number_of_participants, 20).map((row, index) => (
+            {sheetData.slice(number_of_participants, 100).map((row, index) => (
               <tr key={index}>
                 {Object.entries(row).map(([key, value], index) => (
                   <td key={index}>
@@ -176,7 +176,13 @@ export default function Home({ sheetData, number_of_participants, reset_state, s
         </table>
         </>
         )}
-      </main>
+        </>
+      : <div className='final-phase'>
+        <p>O resultado será divulgado ao fim :)</p>
+        {/* <Link href="/final"><span>🔠</span></Link> */}
+        </div>  
+    }
+    </main>
     </div>
   );
 }
@@ -199,20 +205,22 @@ export async function getStaticProps() {
     return rowData;
   });
 
-  const range2 = 'Atual!B1:B4';
+  const range2 = 'Atual!B1:B6';
 
   const res2 = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range2}?key=${apiKey}`); // URL da sua API Next.js
   const data2 = await res2.json();
   const number_of_participants = data2.values[2][0];
   const reset_state = data2.values[3][0];
   const server = data2.values[1][0];
-
+  const already_final = data2.values[5][0] != 'on'
+  console.log(already_final)
   return {
     props: {
       sheetData,
       number_of_participants,
       reset_state,
-      server
+      server,
+      already_final
     },
     revalidate: 5, // Atualiza a página a cada 10 segundos
   };

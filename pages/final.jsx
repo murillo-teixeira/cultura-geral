@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import usePageVisibility from '../hooks/usePageVisibility';
 import NameModal from '../components/NameModal';
 
-export default function Responses({ question_type, number_of_participants, server, reset_state, participantes, convidados }) {
+export default function Responses({ question_type, number_of_participants, server, reset_state, all_participants }) {
   const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isButtonCooldown, setIsButtonCooldown] = useState(false);
@@ -25,8 +25,8 @@ export default function Responses({ question_type, number_of_participants, serve
 
   // Function to handle selecting a name from the modal
   const handleSelectName = (name) => {
-    const idx = convidados.indexOf(name)
-    setSelectedGroup(idx + 11);
+    const idx = all_participants.indexOf(name)
+    setSelectedGroup(idx + 1);
     closeModal();
   };
 
@@ -36,18 +36,18 @@ export default function Responses({ question_type, number_of_participants, serve
     if (reset_state === 'on') {
       setWasPageOnBackground('n');
       setCheatingAlertWasSent('n')
-      localStorage.setItem('ccg2023-eliminated-day2', 'n');
-      localStorage.setItem('ccg2023-eliminated-alert-day2', 'n');
+      localStorage.setItem('ccg2023-eliminated-final', 'n');
+      localStorage.setItem('ccg2023-eliminated-alert-final', 'n');
     }
   }, [reset_state]);
 
   useEffect(() => {
     if (wasPageOnBackground == 'y') {
-      localStorage.setItem('ccg2023-eliminated-day2', 'y');
+      localStorage.setItem('ccg2023-eliminated-final', 'y');
     }
     if (wasPageOnBackground == 'y' && cheatingAlertWasSent == 'n') {
       setCheatingAlertWasSent('y');
-      localStorage.setItem('ccg2023-eliminated-alert-day2', 'y');
+      localStorage.setItem('ccg2023-eliminated-alert-final', 'y');
       const requestBody = {
         group: selectedGroup,
       };
@@ -72,20 +72,20 @@ export default function Responses({ question_type, number_of_participants, serve
 
   // Load the selected group from localStorage when the component mounts
   useEffect(() => {
-    const savedGroup = localStorage.getItem('ccg2023-selected-group-day2');
+    const savedGroup = localStorage.getItem('ccg2023-selected-group-final');
     if (savedGroup > 0) {
       setSelectedGroup(savedGroup);
     }
-    const eliminated = localStorage.getItem('ccg2023-eliminated-day2');
+    const eliminated = localStorage.getItem('ccg2023-eliminated-final');
     setWasPageOnBackground(eliminated);
 
-    const eliminatedAlert = localStorage.getItem('ccg2023-eliminated-alert-day2');
+    const eliminatedAlert = localStorage.getItem('ccg2023-eliminated-alert-final');
     setCheatingAlertWasSent(eliminatedAlert);
   }, []);
 
   // Save the selected group to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('ccg2023-selected-group-day2', selectedGroup);
+    localStorage.setItem('ccg2023-selected-group-final', selectedGroup);
   }, [selectedGroup]);
 
   const handleAnswerSelect = (answer) => {
@@ -160,7 +160,7 @@ export default function Responses({ question_type, number_of_participants, serve
         <h3>COMPETIÇÃO</h3>
         <div className="group-label">
           {selectedGroup ?
-            <p>{convidados[selectedGroup - 11] ? convidados[selectedGroup - 11] : "Grupo inválido..."}</p>
+            <p>{all_participants[selectedGroup - 1]}</p>
             : 
             <button onClick={openModal}>Selecione seu nome</button>  
           }
@@ -168,7 +168,7 @@ export default function Responses({ question_type, number_of_participants, serve
         
 
         {showModal && (
-          <NameModal names={convidados} onSelectName={handleSelectName} onClose={closeModal} />
+          <NameModal names={all_participants} onSelectName={handleSelectName} onClose={closeModal} />
         )}
 
         {question_type == 'M' ? (<>
@@ -226,7 +226,7 @@ export default function Responses({ question_type, number_of_participants, serve
 export async function getStaticProps() {
   const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
   const sheetId = process.env.GOOGLE_SHEETS_ID;
-  const range = 'Atual!B1:B4';
+  const range = 'Atual!B1:B6';
 
   const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`); // URL da sua API Next.js
   const data = await res.json();
@@ -235,14 +235,12 @@ export async function getStaticProps() {
   const server = data.values[1][0];
   const reset_state = data.values[3][0];
   const number_of_participants = data.values[2][0];
-  
 
-  const range2 = 'Respostas!A3:D50';
+  const range2 = 'RespostasFinal!A3:D50';
   const res2 = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range2}?key=${apiKey}`); // URL da sua API Next.js
   const data2 = await res2.json();
   
-  const participantes = data2.values.filter(item => item[3] === 'Participante').map(item => item[0]);;
-  const convidados = data2.values.filter(item => item[3] === 'Convidado').map(item => item[0]);;
+  const all_participants = data2.values.map(item => item[0]);;
   
   return {
     props: {
@@ -250,8 +248,7 @@ export async function getStaticProps() {
       number_of_participants,
       server,
       reset_state,
-      participantes,
-      convidados
+      all_participants
     },
     revalidate: 5, // Atualiza a página a cada 10 segundos
   };
