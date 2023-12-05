@@ -7,7 +7,7 @@ export default function Responses({ question_type, server }) {
 
   // Load the selected group from localStorage when the component mounts
   useEffect(() => {
-    const savedGroup = localStorage.getItem('ccg2023-selected-group');
+    const savedGroup = localStorage.getItem('ccg2023-selected-group-day2');
     if (savedGroup) {
       localStorage.removeItem('ccg2023-selected-group')
       localStorage.removeItem('ccg2023-selected-group-day2')
