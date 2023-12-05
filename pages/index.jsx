@@ -15,18 +15,18 @@ export default function Home({ sheetData, number_of_participants, reset_state, s
     if (reset_state === 'on') {
       setWasPageOnBackground('n');
       setCheatingAlertWasSent('n')
-      localStorage.setItem('ccg2023-eliminated', 'n');
-      localStorage.setItem('ccg2023-eliminated-alert', 'n');
+      localStorage.setItem('ccg2023-eliminated-day2', 'n');
+      localStorage.setItem('ccg2023-eliminated-alert-day2', 'n');
     }
   }, [reset_state]);
 
   useEffect(() => {
     if (wasPageOnBackground == 'y') {
-      localStorage.setItem('ccg2023-eliminated', 'y');
+      localStorage.setItem('ccg2023-eliminated-day2', 'y');
     }
     if (wasPageOnBackground == 'y' && cheatingAlertWasSent == 'n') {
       setCheatingAlertWasSent('y');
-      localStorage.setItem('ccg2023-eliminated-alert', 'y');
+      localStorage.setItem('ccg2023-eliminated-alert-day2', 'y');
       const requestBody = {
         group: selectedGroup,
       };
@@ -52,14 +52,14 @@ export default function Home({ sheetData, number_of_participants, reset_state, s
 
   // Load the selected group from localStorage when the component mounts
   useEffect(() => {
-    const savedGroup = localStorage.getItem('ccg2023-selected-group');
+    const savedGroup = localStorage.getItem('ccg2023-selected-group-day2');
     if (savedGroup > 0) {
       setSelectedGroup(savedGroup);
     }
-    const eliminated = localStorage.getItem('ccg2023-eliminated');
+    const eliminated = localStorage.getItem('ccg2023-eliminated-day2');
     setWasPageOnBackground(eliminated);
 
-    const eliminatedAlert = localStorage.getItem('ccg2023-eliminated-alert');
+    const eliminatedAlert = localStorage.getItem('ccg2023-eliminated-alert-day2');
     setCheatingAlertWasSent(eliminatedAlert);
     // if (eliminated == 'y') {
     //   setWasPageOnBackground('y');
@@ -74,7 +74,7 @@ export default function Home({ sheetData, number_of_participants, reset_state, s
   }
 
   useEffect(() => {
-    const savedGroup = localStorage.getItem('ccg2023-selected-group');
+    const savedGroup = localStorage.getItem('ccg2023-selected-group-day2');
     if (savedGroup && savedGroup > 10) {
       setIsGuest(true);
       console.log("Convidado");
