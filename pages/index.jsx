@@ -120,7 +120,7 @@ export default function Home({ sheetData, number_of_participants, reset_state, s
 
       </Head>
       <main>
-    {already_final ? <>
+    {!already_final ? <>
       <Link href={isGuest ? "/convidado" : "/responder"}><span>🔠</span></Link>
         <img src='/logo_mc.svg'></img>
         <h1>CULTURA GERAL</h1>
@@ -212,8 +212,8 @@ export async function getStaticProps() {
   const number_of_participants = data2.values[2][0];
   const reset_state = data2.values[3][0];
   const server = data2.values[1][0];
-  const already_final = data2.values[5][0] != 'on'
-  console.log(already_final)
+  const already_final = data2.values[5][0] == 'on'
+  // console.log(already_final)
   return {
     props: {
       sheetData,

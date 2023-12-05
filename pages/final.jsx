@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import usePageVisibility from '../hooks/usePageVisibility';
 import NameModal from '../components/NameModal';
 
-export default function Responses({ question_type, number_of_participants, server, reset_state, all_participants }) {
+export default function Responses({ question_type, number_of_participants, server, reset_state, all_participants, already_final }) {
   const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isButtonCooldown, setIsButtonCooldown] = useState(false);
@@ -152,6 +152,7 @@ export default function Responses({ question_type, number_of_participants, serve
       </Head>
 
       <main>
+      {already_final ? <>
         <Link href="/"><span>🥇</span></Link>
         { wasPageOnBackground == 'n' ? 
         (<>
@@ -218,6 +219,11 @@ export default function Responses({ question_type, number_of_participants, serve
         :
         <div className='eliminado'>Eliminado</div>  
       }
+              </>
+      : <div className='final-phase'>
+        <p>Ainda não</p>
+        </div>  
+    }
       </main>
     </div>
   );
@@ -235,7 +241,8 @@ export async function getStaticProps() {
   const server = data.values[1][0];
   const reset_state = data.values[3][0];
   const number_of_participants = data.values[2][0];
-
+  const already_final = data.values[5][0] == 'on'
+  console.log(already_final)
   const range2 = 'RespostasFinal!A3:D50';
   const res2 = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range2}?key=${apiKey}`); // URL da sua API Next.js
   const data2 = await res2.json();
@@ -248,7 +255,8 @@ export async function getStaticProps() {
       number_of_participants,
       server,
       reset_state,
-      all_participants
+      all_participants,
+      already_final
     },
     revalidate: 5, // Atualiza a página a cada 10 segundos
   };
