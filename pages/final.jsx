@@ -153,7 +153,7 @@ export default function Responses({ question_type, number_of_participants, serve
 
       <main>
       {already_final ? <>
-        <Link href="/"><span>🥇</span></Link>
+        {/* <Link href="/"><span>🥇</span></Link> */}
         { wasPageOnBackground == 'n' ? 
         (<>
         <img src='/logo_mc.svg'></img>

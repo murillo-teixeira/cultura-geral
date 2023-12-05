@@ -179,7 +179,7 @@ export default function Home({ sheetData, number_of_participants, reset_state, s
         </>
       : <div className='final-phase'>
         <p>O resultado será divulgado ao fim :)</p>
-        {/* <Link href="/final"><span>🔠</span></Link> */}
+        <Link href="/final"><span>🔠</span></Link>
         </div>  
     }
     </main>
