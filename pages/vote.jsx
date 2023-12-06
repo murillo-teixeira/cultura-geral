@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid'; // Import UUID library
 
 
-export default function Home({ data, server }) {
+export default function Home({ data, server, voting_amount }) {
 
     const [selectedNames, setSelectedNames] = useState([]);
 
@@ -27,7 +27,7 @@ export default function Home({ data, server }) {
     const handleCheckboxChange = (name) => {
         if (selectedNames.includes(name)) {
             setSelectedNames(selectedNames.filter((selected) => selected !== name));
-        } else if (selectedNames.length < 3) {
+        } else if (selectedNames.length < voting_amount) {
             setSelectedNames([...selectedNames, name]);
         }
     };
@@ -36,8 +36,8 @@ export default function Home({ data, server }) {
     const deviceUUID = generateUUID();
     console.log(selectedNames)
     // Create a POST request with the selected group and answer
-    if (selectedNames.length < 3) 
-      alert("Selecione 3 participantes!")
+    if (selectedNames.length < voting_amount) 
+      alert(`Selecione ${voting_amount} participantes!`)
     else {
       const requestBody = {
         id: deviceUUID,
@@ -122,11 +122,13 @@ export async function getStaticProps() {
   const res2 = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range2}?key=${apiKey}`); // URL da sua API Next.js
   const data2 = await res2.json();
   const server = data2.values[1][0];
+  const voting_amount = data2.values[4][0];
 
   return {
     props: {
         data,
-        server
+        server,
+        voting_amount
     },
     revalidate: 5, // Atualiza a página a cada 10 segundos
   };
