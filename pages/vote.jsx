@@ -1,11 +1,28 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import usePageVisibility from '../hooks/usePageVisibility';
+import { v4 as uuidv4 } from 'uuid'; // Import UUID library
+
 
 export default function Home({ data, server }) {
 
     const [selectedNames, setSelectedNames] = useState([]);
+
+    // Function to generate UUID and save it to localStorage
+    const generateUUID = () => {
+        let uuid = localStorage.getItem('ccg2023-deviceUUID');
+        if (!uuid) {
+        uuid = uuidv4();
+        localStorage.setItem('ccg2023-deviceUUID', uuid);
+        }
+        console.log(uuid)
+        return uuid;
+    };
+
+    useEffect(() => {
+        // Call generateUUID when the component mounts
+        generateUUID();
+    }, []);
+
 
     const handleCheckboxChange = (name) => {
         if (selectedNames.includes(name)) {
@@ -15,14 +32,15 @@ export default function Home({ data, server }) {
         }
     };
   
-    
   const handleSubmit = () => {
+    const deviceUUID = generateUUID();
     console.log(selectedNames)
     // Create a POST request with the selected group and answer
     if (selectedNames.length < 3) 
       alert("Selecione 3 participantes!")
     else {
       const requestBody = {
+        id: deviceUUID,
         votes: selectedNames,
       };
 
