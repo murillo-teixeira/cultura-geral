@@ -176,6 +176,7 @@ span {
   background-color: #f2f2f2; /* Add a background color */
   color: #333; /* Add text color */
   font-size: 16px; /* Set the font size for the dropdown */ /* Change cursor on hover */
+  transition: all 0.3s ease;
 }
 
 /* Style for dropdown options */
@@ -268,6 +269,7 @@ span {
   border-radius: 8px;
   font-weight: bold;
   font-size: 20px;
+  transition: all 0.3s ease;
 }
 .unselected-answer {
   background-color: #f2f2f2;
@@ -294,6 +296,7 @@ span {
   font-size: 16px;
   margin-top: 10px;
   border: none;
+  transition: all 0.3s ease;
 }
 
 .submit-button:active {
@@ -344,6 +347,7 @@ span {
   right: 10px;
   font-size: 24px;
   color: #f2f2f2;
+  transition: all 0.3s ease;
 }
 
 .close:hover,
@@ -362,6 +366,7 @@ ul {
 ul li {
   padding: 12px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 ul li:hover {
