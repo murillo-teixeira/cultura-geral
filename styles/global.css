@@ -43,7 +43,7 @@ body {
   flex-direction: column;
   font-size: 32px;
   font-weight: medium;
-  color: #ffffff;
+  color: #f2f2f2;
 }
 
 
@@ -58,7 +58,7 @@ body {
   position:unset;
   background-color: azure;
   border-radius: 50%;
-  box-shadow: 0 0 5px #FFFFFF;
+  box-shadow: 0 0 5px #f2f2f2;
   font-size: 36px;
 }
 
@@ -68,7 +68,7 @@ body {
 }
 
 h1 {
-  color: white;
+  color: #f2f2f2;
   font-size: 40px;
   margin-bottom: 4px;
   margin-top: 12px;
@@ -80,7 +80,7 @@ h3 {
   padding: 10;
   height: 50px;
   width: 180px;
-  color: white;
+  color: #f2f2f2;
   margin-top: 0;
   background-color: #BB3B17;
   border-radius: 80%;
@@ -95,9 +95,22 @@ img {
 table { 
   width: 80vw;
   padding: 10px;
-  background-color: white;
+  background-color: #f2f2f2;
   border-radius: 16px;
   max-width: 400px;
+}
+
+.voting-table {
+  max-width: 300px;
+  margin-bottom: 10px;
+}
+
+.voting-table td {
+  text-align: center;
+}
+
+table input {
+  width: 100%;
 }
 
 td:nth-child(2) > div {
@@ -150,7 +163,7 @@ span {
   right: 10px;
   background-color: azure;
   border-radius: 50%;
-  box-shadow: 0 0 5px #FFFFFF;
+  box-shadow: 0 0 5px #f2f2f2;
   font-size: 20px;
 }
 
@@ -179,7 +192,7 @@ span {
 }
 
 .group-label, .answer-label, .guests-label {
-  color: white;
+  color: #f2f2f2;
   font-weight: medium;
 }
 
@@ -228,7 +241,7 @@ span {
 
 .selected-button {
   background-color: #22B5A7; /* Brighter yellow for selected button */
-  color: #fff;
+  color: #f2f2f2;
   border: none;
   border-radius: 50%; /* Make buttons round */
   padding: 10px;
@@ -265,7 +278,7 @@ span {
 
 .selected-answer {
   background-color: rgb(181, 134, 34); /* Brighter yellow for selected button */
-  color: #fff;
+  color: #f2f2f2;
   border: none;
   padding: 10px;
   margin: 5px;
@@ -285,7 +298,7 @@ span {
 
 .submit-button:active {
   background-color: #BB3B17;
-  color: white;
+  color: #f2f2f2;
 }
 
 .text-answer-input {
@@ -315,7 +328,7 @@ span {
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: #f2f2f2;
   padding: 20px;
   height: 80vh;
   min-width: 300px;
@@ -330,7 +343,7 @@ span {
   top: 10px;
   right: 10px;
   font-size: 24px;
-  color: #aaa;
+  color: #f2f2f2;
 }
 
 .close:hover,
@@ -352,7 +365,7 @@ ul li {
 }
 
 ul li:hover {
-  background-color: #f0f0f0;
+  background-color: #f2f2f2;
 }
 
 .group-label p {
@@ -363,11 +376,10 @@ ul li:hover {
 }
 
 .group-label button {
-  background-color: #ffffff;
+  background-color: #f2f2f2;
   font-size: 16px;
   color: #000;
-  box-shadow: 0 0 5px #FFFFFF;
-
+  box-shadow: 0 0 5px #f2f2f2;
 }
 
 .group-label p, .group-label button {
@@ -377,4 +389,22 @@ ul li:hover {
   padding: 10px;
   border-radius: 10px;
   /* font-weight: bold; */
+}
+
+/* Custom styles for checkboxes */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 20px; /* Adjust the size of the checkbox */
+  height: 20px; /* Adjust the size of the checkbox */
+  border-radius: 50%; /* Make it round */
+  border: 2px solid #0aa293; /* Green border */
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #0aa293; /* Green background when checked */
 }
