@@ -23,7 +23,7 @@ export default function Home({ data, server }) {
       alert("Selecione 3 participantes!")
     else {
       const requestBody = {
-        names: selectedNames,
+        votes: selectedNames,
       };
 
       // Send the POST request to your desired endpoint
